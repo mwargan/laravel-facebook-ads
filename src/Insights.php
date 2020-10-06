@@ -3,9 +3,9 @@
 namespace Edbizarro\LaravelFacebookAds;
 
 use FacebookAds\Object\Ad;
+use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AdSet;
 use FacebookAds\Object\Campaign;
-use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\Values\AdsInsightsLevelValues;
 
 class Insights
@@ -25,10 +25,14 @@ class Insights
         $params['time_increment'] = $params['time_increment'] ?? '1';
         $params['limit'] = $params['limit'] ?? 100;
         $params['level'] = $level;
-        $params['time_range'] = [
-            'since' => $period->startDate->format('Y-m-d'),
-            'until' => $period->endDate->format('Y-m-d'),
-        ];
+        if (isset($params['date_preset'])) {
+            $params['date_preset'] = $params['date_preset'] ?? 'lifetime';
+        } else {
+            $params['time_range'] = [
+                'since' => $period->startDate->format('Y-m-d'),
+                'until' => $period->endDate->format('Y-m-d'),
+            ];
+        }
 
         $apiResponse = $levelClass->getInsights($fields, $params);
 
