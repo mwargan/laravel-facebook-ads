@@ -22,10 +22,13 @@ class AdAccount extends AbstractEntity
      * @see https://developers.facebook.com/docs/marketing-api/reference/adgroup#Reading
      * @throws \Edbizarro\LaravelFacebookAds\Exceptions\MissingEntityFormatter
      */
-    public function ads(array $fields = []): Collection
+    public function ads(array $fields = [], array $params = []): Collection
     {
+        
+        $params['limit'] = $params['limit'] ?? 50000;
+
         return $this->format(
-            $this->response->getAds($fields)
+            $this->response->getAds($fields, $params)
         );
     }
 }
